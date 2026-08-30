@@ -33,7 +33,13 @@
   input[type=text],input[type=date],input[type=number],select{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px;font:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:48px}
   input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
   .big{font-size:17px;padding:14px}
-  .slider{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--soft);margin-top:12px;flex-wrap:wrap}
+  .tol{margin-top:14px}
+  .seg{display:flex;gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-top:6px}
+  .seg button{flex:1;padding:12px 6px;font:inherit;font-size:.9rem;font-weight:600;background:#fff;color:var(--soft);border:none;border-right:1px solid var(--line);cursor:pointer;min-height:48px}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--accent);color:#fff}
+  .seg .hint{}
+  .tolhint{font-size:.78rem;color:var(--soft);margin-top:5px}
   input[type=range]{accent-color:var(--accent);flex:1;min-width:120px;height:26px}
   .ftog{display:none;width:100%;margin-top:12px;padding:13px;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:11px;font:inherit;font-weight:650;cursor:pointer;min-height:48px}
   #filterWrap{margin-top:12px}
@@ -98,7 +104,7 @@
   <div class="panel">
     <div><label id="qlbl">Search by name (any spelling - English or Nepali)</label>
       <input type="text" id="q" class="big" placeholder="Type a name…"></div>
-    <div class="slider"><span>Spelling tolerance</span><input type="range" id="fz" min="0" max="3" value="2"><span id="fzl">Medium</span></div>
+    <div class="tol"><label>How to match spelling</label><div class="seg" id="tolSeg"><button type="button" data-v="0">Exact</button><button type="button" data-v="2" class="on">Similar</button><button type="button" data-v="3">Loose</button></div><div class="tolhint" id="tolHint">Finds close spellings (e.g. Sanjeev / Sanjiv, Monica / Monika).</div></div>
     <button type="button" id="filterToggle" class="ftog">Show filters</button>
     <div id="filterWrap"><div class="row" id="filters"></div></div>
   </div>
@@ -159,6 +165,7 @@ function toEnglish(text){
 
 let DATA={rescued:[],deceased:[]};
 let TAB='deceased';
+let TOL=2;
 
 
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
@@ -223,7 +230,7 @@ function buildFilters(){
 function val(id){const e=document.getElementById(id);return e?(e.type==='checkbox'?e.checked:e.value):'';}
 
 function render(){
-  const q=val('q').trim();const maxD=+val('fz');const qv=queryVariants(q);
+  const q=val('q').trim();const maxD=TOL;const qv=queryVariants(q);
   let list,cards;
   if(TAB==='rescued'){
     const nat=val('fNat'),gen=val('fGen'),cty=val('fCountry'),status=val('fStatus'),rfrom=val('fRFrom');
@@ -299,7 +306,7 @@ function setTab(t){TAB=t;
 }
 
 document.getElementById('q').addEventListener('input',render);
-document.getElementById('fz').addEventListener('input',()=>{document.getElementById('fzl').textContent=['Exact','Low','Medium','High'][+val('fz')];render();});
+(function(){const seg=document.getElementById('tolSeg');const hints={'0':'Exact matches only.','2':'Finds close spellings (e.g. Sanjeev / Sanjiv, Monica / Monika).','3':'Loosest: more matches, but also more unrelated names.'};seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');TOL=+b.dataset.v;document.getElementById('tolHint').textContent=hints[b.dataset.v];render();});})();
 const ft=document.getElementById('filterToggle');if(ft)ft.onclick=()=>{const w=document.getElementById('filterWrap');const o=w.classList.toggle('open');ft.textContent=o?'Hide filters':'Show filters';};
 document.getElementById('tabR').onclick=()=>setTab('rescued');
 document.getElementById('tabD').onclick=()=>setTab('deceased');
