@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Rasuwa Flood finder - scheduled scraper.
-(1) NDRRMA rescued-persons API  (2) Nepal Police UDB deceased list + detail pages.
+(1) NDRRMA rescued-persons API  (2) Nepal Police UDB list + detail pages.
 Translates to English, fixes dates, tags flood, pulls identifying details
 (height/clothes/marks/etc.), de-dupes, writes data/*.json.
 
