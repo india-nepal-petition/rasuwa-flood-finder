@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rasuwa Flood - Unidentified Deceased</title>
+<style>
+  :root{
+    --bg:#eef1f4; --card:#ffffff; --ink:#182028; --soft:#5a6672; --line:#e1e6ec;
+    --accent:#2f6f7a; --accent2:#2f6b4a; --soft-a:#e6f0f2; --soft-b:#e7f1ea;
+    --flood:#9a5f2a; --flood-soft:#f7efe2; --hit:#ffe6a3; --hit2:#f4c94f;
+    --shadow:0 1px 2px rgba(20,30,40,.06),0 2px 8px rgba(20,30,40,.05); --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Noto Sans Devanagari",sans-serif;
+    padding:14px 12px 60px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:clamp(1.2rem,5vw,1.5rem);margin:0 0 3px;font-weight:680;letter-spacing:-.01em}
+  .sub{color:var(--soft);font-size:.92rem;margin:0}
+  .updated{font-size:.78rem;color:var(--soft);margin-top:4px}
+  .disc{background:#fff8ec;border:1px solid #ecdcbe;border-radius:12px;padding:12px 14px;font-size:.85rem;color:#6b5636;margin:14px 0}
+  .disc b{color:#4a3c22}
+
+  .tabs{display:flex;gap:6px;background:#dde3e9;padding:5px;border-radius:14px;margin:14px 0}
+  .tab{flex:1;text-align:center;padding:11px 8px;border-radius:10px;cursor:pointer;font-weight:650;font-size:.95rem;color:var(--soft);border:none;background:transparent;transition:background .15s}
+  .tab.active{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+  .tab .n{display:block;font-size:.72rem;font-weight:500;color:var(--soft);margin-top:1px}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:14px;box-shadow:var(--shadow)}
+  label{display:block;font-size:.74rem;font-weight:700;color:var(--soft);margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+  input[type=text],input[type=date],input[type=number],select{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px;font:inherit;font-size:16px;background:#fff;color:var(--ink);min-height:48px}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .big{font-size:17px;padding:14px}
+  .slider{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--soft);margin-top:12px;flex-wrap:wrap}
+  input[type=range]{accent-color:var(--accent);flex:1;min-width:120px;height:26px}
+  .ftog{display:none;width:100%;margin-top:12px;padding:13px;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:11px;font:inherit;font-weight:650;cursor:pointer;min-height:48px}
+  #filterWrap{margin-top:12px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .check{display:flex;align-items:center;gap:9px;font-size:.92rem;color:var(--ink);font-weight:500}
+  .check input{width:22px;height:22px;min-height:0;accent-color:var(--accent)}
+
+  #count{font-size:.9rem;color:var(--soft);margin:6px 2px 12px}#count b{color:var(--ink)}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  .rec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;font-size:.9rem;box-shadow:var(--shadow)}
+  .rec.flood{border-left:5px solid var(--flood)}
+  .nm{font-size:1.1rem;font-weight:680;line-height:1.25}
+  .nm .orig{display:block;font-size:.85rem;font-weight:400;color:var(--soft);margin-top:1px}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;margin:1px 0 2px}
+  .b{font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--soft-a);color:var(--accent)}
+  .b.f{background:#f4e9ef;color:#8a4a6e}.b.m{background:#e7eef4;color:#3a5a72}
+  .b.fo{background:#eee7f4;color:#6a4a8a}.b.flood{background:var(--flood-soft);color:var(--flood)}
+  .b.safe{background:#e6f0ea;color:var(--accent2)}.b.care{background:#fdeede;color:#9a5a1a}
+  .fld{color:var(--soft);font-size:.86rem}.fld b{color:var(--ink);font-weight:600}
+  .det{margin-top:7px;padding-top:8px;border-top:1px dashed var(--line);display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}
+  .det-h{grid-column:1/-1;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--accent2);font-weight:700;margin-bottom:2px}
+  .note2{margin-top:7px;background:var(--flood-soft);border:1px solid #e8d6bd;border-radius:10px;padding:8px 10px;font-size:.83rem;color:#5f4c34}
+  .rec a.open{margin-top:5px;font-size:.86rem;color:var(--accent);font-weight:650;text-decoration:none;display:inline-block;padding:4px 0}
+  .rec a.open:active{opacity:.7}
+  .ph{background:#eceae4;border-radius:10px;aspect-ratio:4/3;overflow:hidden;display:none;align-items:center;justify-content:center;margin-bottom:4px}
+  .ph img{width:100%;height:100%;object-fit:cover}
+  body.showphoto .rec .ph{display:flex}
+  mark{background:var(--hit);padding:0 2px;border-radius:3px}mark.s{background:var(--hit2);font-weight:600}
+  .empty{padding:34px 14px;text-align:center;color:var(--soft)}
+  .warn{font-size:.84rem;color:var(--flood);background:var(--flood-soft);border:1px solid #e8d6bd;border-radius:11px;padding:11px 13px;margin-bottom:12px}
+  .warn .check{display:inline-flex;margin-left:2px;margin-top:6px;color:var(--flood);font-weight:600}
+  footer{margin-top:22px;padding:15px;background:#e7ecf1;border:1px solid var(--line);border-radius:14px;font-size:.86rem;line-height:1.6}
+  footer b{color:var(--ink)}footer a{color:var(--accent);word-break:break-word}
+
+  @media(max-width:640px){
+    .ftog{display:block}
+    #filterWrap{display:none}
+    #filterWrap.open{display:block}
+    .disc{font-size:.82rem}
+  }
+  @media(min-width:641px){
+    .row{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Rasuwa Flood - Unidentified Deceased</h1>
+  <p class="sub">Search Nepal Police's list of <b>unidentified deceased</b> people, with identifying details, translated to English.</p>
+  <p class="updated" id="updated"></p>
+
+  <div class="disc">
+    <b>Please read:</b> This is an unofficial community tool. Data is copied from Nepal Police and NDRRMA public listings and translated automatically, so spellings may vary and it may be incomplete or a few hours out of date. <b>It cannot confirm anyone.</b> Treat every result as a <b>possible</b> record only, and confirm through the official contacts at the bottom before drawing any conclusion.
+  </div>
+
+  <div class="tabs" style="display:none">
+    <div class="tab active" data-tab="rescued" id="tabR">Rescued (alive)<span class="n" id="nR"></span></div>
+    <div class="tab" data-tab="deceased" id="tabD">Unidentified deceased<span class="n" id="nD"></span></div>
+  </div>
+
+  <div class="panel">
+    <div><label id="qlbl">Search by name (any spelling - English or Nepali)</label>
+      <input type="text" id="q" class="big" placeholder="Type a name…"></div>
+    <div class="slider"><span>Spelling tolerance</span><input type="range" id="fz" min="0" max="3" value="2"><span id="fzl">Medium</span></div>
+    <button type="button" id="filterToggle" class="ftog">Show filters</button>
+    <div id="filterWrap"><div class="row" id="filters"></div></div>
+  </div>
+
+  <div id="warn"></div>
+  <div id="count"></div>
+  <div id="grid" class="grid"></div>
+
+  <footer>
+    <b>To confirm any person, contact the authorities - not this tool:</b><br>
+    • Nepal Police, Crime Investigation Dept (runs the deceased list): <b>01-4412748</b> · <a href="mailto:cicu@nepalpolice.gov.np">cicu@nepalpolice.gov.np</a><br>
+    • Indian Embassy, Kathmandu (for Indian nationals, WhatsApp): <b>+977 985 131 6807</b><br>
+    • Nepal disaster hotline: <b>1149</b> · Red Cross family tracing: search <b>“ICRC Restoring Family Links”</b><br>
+    <span style="color:var(--soft)">Sources: Nepal Police UDB &amp; NDRRMA. This page does not store anything you type.</span>
+  </footer>
+</div>
+
+<script>
+
+const _CONS={"\u0915":"k","\u0916":"kh","\u0917":"g","\u0918":"gh","\u0919":"ng","\u091a":"ch","\u091b":"chh","\u091c":"j","\u091d":"jh","\u091e":"ny","\u091f":"t","\u0920":"th","\u0921":"d","\u0922":"dh","\u0923":"n","\u0924":"t","\u0925":"th","\u0926":"d","\u0927":"dh","\u0928":"n","\u092a":"p","\u092b":"ph","\u092c":"b","\u092d":"bh","\u092e":"m","\u092f":"y","\u0930":"r","\u0932":"l","\u0935":"v","\u0936":"sh","\u0937":"sh","\u0938":"s","\u0939":"h","\u0915\u094d\u0937":"ksh","\u0924\u094d\u0930":"tr","\u091c\u094d\u091e":"gy","\u0933":"l","\u0931":"r","\u0921\u093c":"r","\u0922\u093c":"rh","\u092b\u093c":"f","\u091c\u093c":"z","\u0915\u093c":"q","\u0916\u093c":"kh","\u0917\u093c":"g"};
+const _IVOW={"\u0905":"a","\u0906":"a","\u0907":"i","\u0908":"i","\u0909":"u","\u090a":"u","\u090b":"ri","\u090f":"e","\u0910":"ai","\u0913":"o","\u0914":"au","\u090d":"e","\u0911":"o"};
+const _MATRA={"\u093e":"a","\u093f":"i","\u0940":"i","\u0941":"u","\u0942":"u","\u0943":"ri","\u0947":"e","\u0948":"ai","\u094b":"o","\u094c":"au","\u0945":"e","\u0949":"o"};
+const _SIGN={"\u0902":"n","\u0901":"n","\u0903":"h","\u0950":"om","\u0964":".","\u0965":".","\u093d":""};
+const _DIG={"\u0966":"0","\u0967":"1","\u0968":"2","\u0969":"3","\u096a":"4","\u096b":"5","\u096c":"6","\u096d":"7","\u096e":"8","\u096f":"9"};
+const _HAL='्',_NUK='़';
+const _DICT={"\u0917\u0923\u094d\u0921\u0915\u0940":"Gandaki","\u092c\u093e\u0917\u092e\u0924\u0940":"Bagmati","\u0915\u094b\u0936\u0940":"Koshi","\u0932\u0941\u092e\u094d\u092c\u093f\u0928\u0940":"Lumbini","\u0915\u0930\u094d\u0923\u093e\u0932\u0940":"Karnali","\u0938\u0941\u0926\u0942\u0930\u092a\u0936\u094d\u091a\u093f\u092e":"Sudurpashchim","\u092e\u0927\u0947\u0936":"Madhesh","\u092a\u094d\u0930\u0926\u0947\u0936":"Province","\u0930\u0938\u0941\u0935\u093e":"Rasuwa","\u0930\u0938\u0941\u0935\u093e\u0917\u0922\u0940":"Rasuwagadhi","\u0928\u0941\u0935\u093e\u0915\u094b\u091f":"Nuwakot","\u0924\u094d\u0930\u093f\u0936\u0941\u0932\u0940":"Trishuli","\u0927\u093e\u0926\u093f\u0919":"Dhading","\u091a\u093f\u0924\u0935\u0928":"Chitwan","\u0928\u0935\u0932\u092a\u0930\u093e\u0938\u0940":"Nawalparasi","\u092d\u0930\u0924\u092a\u0941\u0930":"Bharatpur","\u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902":"Kathmandu","\u0915\u093e\u0920\u092e\u093e\u0923\u094d\u0921\u094c\u0902":"Kathmandu","\u0938\u093f\u0928\u094d\u0927\u0941\u092a\u093e\u0932\u094d\u091a\u094b\u0915":"Sindhupalchok","\u0917\u094b\u0930\u0916\u093e":"Gorkha","\u0930\u093e\u092e\u0947\u091b\u093e\u092a":"Ramechhap","\u092c\u0930\u094d\u0926\u0918\u093e\u091f":"Bardaghat","\u0938\u0941\u0938\u094d\u0924\u093e":"Susta","\u0917\u0948\u0902\u0921\u093e\u0915\u094b\u091f":"Gaindakot","\u0917\u0948\u0901\u0921\u093e\u0915\u094b\u091f":"Gaindakot","\u092e\u0927\u094d\u092f\u0935\u093f\u0928\u094d\u0926\u0941":"Madhyabindu","\u092e\u0927\u094d\u092f\u092c\u093f\u0928\u094d\u0926\u0941":"Madhyabindu","\u092e\u0927\u094d\u092f\u0947\u0935\u093f\u0928\u094d\u0926\u0941":"Madhyabindu","\u091f\u093f\u092e\u0941\u0930\u0947":"Timure","\u0938\u094d\u092f\u093e\u092b\u094d\u0930\u0941\u092c\u0947\u0938\u0940":"Syabrubesi","\u0938\u094d\u092f\u093e\u092b\u094d\u0930\u0941\u092c\u0947\u0936\u0940":"Syabrubesi","\u0938\u094d\u092f\u093e\u092b\u094d\u0930\u0941\u0935\u0947\u0936\u0940":"Syabrubesi","\u0938\u094d\u092f\u093e\u092b\u094d\u0930\u0941":"Syabru","\u0927\u0941\u0928\u094d\u091a\u0947":"Dhunche","\u092c\u0947\u0924\u094d\u0930\u093e\u0935\u0924\u0940":"Betrawati","\u0935\u0947\u0924\u094d\u0930\u0935\u0924\u0940":"Betrawati","\u092c\u091f\u094d\u091f\u093e\u0930":"Battar","\u0915\u093e\u0932\u093f\u0915\u093e\u0938\u094d\u0925\u093e\u0928":"Kalikasthan","\u0939\u093e\u0915\u0941\u092c\u0947\u0936\u0940":"Hakubesi","\u0939\u093e\u0915\u0941\u092c\u0947\u0938\u0940":"Hakubesi","\u091a\u093f\u0932\u093f\u092e\u0947":"Chilime","\u092e\u0948\u0932\u0941\u0919":"Mailung","\u0915\u094b\u0932\u0928\u0940":"Kolani","\u092e\u093e\u0928\u0947\u0922\u0941\u0919\u094d\u0917\u093e":"Manedhunga","\u0938\u0932\u093f\u091f\u093e\u0930":"Salitar","\u0924\u0941\u092a\u094d\u091a\u0947":"Tupche","\u0936\u093f\u0935\u092a\u0941\u0930\u0940":"Shivapuri","\u092c\u093f\u0926\u0941\u0930":"Bidur","\u0917\u0932\u094d\u091b\u0940":"Galchhi","\u0927\u0948\u092c\u0941\u0919":"Dhaibung","\u0936\u093e\u0928\u094d\u0924\u093f":"Shanti","\u092c\u091c\u093e\u0930":"Bazar","\u092c\u091d\u093e\u0919":"Bajhang","\u092e\u0939\u0924\u094d\u0924\u0930\u0940":"Mahottari","\u0930\u094c\u0924\u0939\u091f":"Rautahat","\u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e":"Metropolitan City","\u0909\u092a\u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e":"Sub-Metropolitan City","\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e":"Municipality","\u0917\u093e\u0909\u0901\u092a\u093e\u0932\u093f\u0915\u093e":"Rural Municipality","\u0905\u0938\u094d\u092a\u0924\u093e\u0932":"Hospital","\u092a\u094d\u0930\u093e\u0926\u0947\u0936\u093f\u0915":"Provincial","\u091c\u093f\u0932\u094d\u0932\u093e":"District","\u0935\u0921\u093e":"Ward","\u0935\u093f\u0926\u0947\u0936\u0940":"Foreign","\u092d\u093e\u0930\u0924":"India","\u091a\u0940\u0928":"China","\u091a\u0948\u0928\u0908":"Chennai","\u0926\u0947\u0936":"Country","\u0920\u0947\u0917\u093e\u0928\u093e":"Address","\u0928\u0916\u0941\u0932\u0947\u0915\u094b":"Unknown","\u092a\u0942\u0930\u094d\u0935":"East","\u092a\u0936\u094d\u091a\u093f\u092e":"West","\u0909\u0924\u094d\u0924\u0930":"North","\u0926\u0915\u094d\u0937\u093f\u0923":"South","\u0930\u0939\u0947\u0915\u094b":"","\u092c\u091c\u0947":"","\u0909\u092e\u0947\u0930":"Age","\u092a\u094d\u0930\u0939\u0930\u0940":"Police","\u0915\u0941\u092e\u093e\u0930":"Kumar","\u0915\u0941\u092e\u093e\u0930\u0940":"Kumari","\u0938\u093f\u0902\u0939":"Singh","\u0924\u093e\u092e\u093e\u0919":"Tamang","\u0936\u094d\u0930\u0947\u0937\u094d\u0920":"Shrestha","\u0939\u093e\u0932":"Current","\u0936\u0935":"body","\u0930\u093e\u0916\u0947\u0915\u094b":"kept at","\u0938\u094d\u0925\u093e\u0928":"location","\u0905\u0935\u0938\u094d\u0925\u093e":"condition","\u0935\u093f\u092a\u0926\u094d":"disaster","\u0935\u093f\u092a\u0926":"disaster","\u092e\u0943\u0924\u0915":"deceased","\u0918\u093e\u0907\u0924\u0947":"injured","\u0909\u0926\u094d\u0927\u093e\u0930":"rescued","\u0938\u0915\u093f\u090f\u0915\u094b":"","\u0917\u0930\u093f\u090f\u0915\u094b":"","\u0920\u093e\u0915\u0941\u0930":"Thakur","\u092f\u093e\u0926\u0935":"Yadav","\u091a\u094c\u0927\u0930\u0940":"Chaudhary","\u0917\u0941\u092a\u094d\u0924\u093e":"Gupta","\u0936\u093e\u0939":"Shah","\u0938\u093e\u0939":"Sah"};
+const _KEYS=Object.keys(_DICT).sort((a,b)=>b.length-a.length);
+const _isDeva=c=>c>='\u0900'&&c<='\u097f';
+function _translit(s){
+  let out='',i=0,n=s.length;
+  while(i<n){
+    const ch=s[i];
+    if(_CONS[ch]!==undefined){
+      let base=_CONS[ch],j=i+1;
+      if(j<n&&s[j]===_NUK)j++;
+      if(j<n&&s[j]===_HAL){out+=base;i=j+1;continue;}
+      if(j<n&&_MATRA[s[j]]!==undefined){out+=base+_MATRA[s[j]];i=j+1;continue;}
+      const nxt=j<n?s[j]:'';
+      out+=(nxt===''||!_isDeva(nxt))?base:base+'a';
+      i=j;continue;
+    }
+    if(_IVOW[ch]!==undefined){out+=_IVOW[ch];i++;continue;}
+    if(_MATRA[ch]!==undefined){out+=_MATRA[ch];i++;continue;}
+    if(_SIGN[ch]!==undefined){out+=_SIGN[ch];i++;continue;}
+    if(_DIG[ch]!==undefined){out+=_DIG[ch];i++;continue;}
+    if(ch===_HAL||ch===_NUK){i++;continue;}
+    out+=ch;i++;
+  }
+  return out?out.charAt(0).toUpperCase()+out.slice(1):out;
+}
+function toEnglish(text){
+  if(!text)return text;
+  text=String(text);
+  for(const k of _KEYS){ if(text.indexOf(k)>=0) text=text.split(k).join(' '+_DICT[k]+' '); }
+  text=text.replace(/[\u0900-\u097f]+/g,m=>_translit(m));
+  return text.replace(/\s+/g,' ').replace(/^[\s,]+|[\s,]+$/g,'');
+}
+
+let DATA={rescued:[],deceased:[]};
+let TAB='deceased';
+
+
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function norm(s){return String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()],c=new Array(n+1);
+  for(let i=1;i<=m;i++){c[0]=i;for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));[p,c]=[c,p];}return p[n];}
+
+function queryVariants(q){
+  const v=new Set();const n=norm(q);if(n)v.add(n);
+  try{const t=norm(toEnglish(q));if(t)v.add(t);}catch(e){}
+  return [...v].filter(Boolean);
+}
+function matches(hay,qv,maxD){
+  const nh=norm(hay);
+  for(const q of qv){
+    if(!q)continue;
+    if(nh.includes(q))return 'sub';
+    if(maxD>0&&q.length>=3){for(const w of nh.split(/[\s,.;/()\-]+/)){if(w&&Math.abs(w.length-q.length)<=maxD&&lev(w,q)<=maxD)return 'fz';}}
+  }
+  return false;
+}
+function hi(txt,qv,maxD){
+  const s=String(txt==null?'':txt);if(!qv.length)return esc(s);
+  const ns=norm(s);
+  for(const q of qv){const i=ns.indexOf(q);if(i>=0)return esc(s.slice(0,i))+'<mark class="s">'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));}
+  if(maxD>0)return s.split(/(\s+)/).map(w=>{const nw=norm(w);for(const q of qv)if(nw.length>=3&&lev(nw,q)<=maxD)return '<mark>'+esc(w)+'</mark>';return esc(w);}).join('');
+  return esc(s);
+}
+
+function haystackR(r){return [r.name,r.name_original,r.remarks,r.rescued_from,r.stationed_at,r.country,r.nationality,r.gender,r.age].join('  ');}
+function haystackD(r){return [r.found_place,r.found_full,r.found_place_original,r.current_location,r.gender,r.age,r.id,r.sn,r.height,r.build,r.complexion,r.eye_colour,r.hair_colour,r.clothes,r.shoes,r.personal,r.marks,r.special,r.ethnicity,r.reg_no].join('  ');}
+const DISTRICTS=['Rasuwa','Nuwakot','Nawalparasi','Chitwan','Dhading','Sindhupalchok','Kathmandu','Gorkha','Ramechhap','Makwanpur','Tanahun','Kaski','Lamjung','Kavre','Lalitpur','Bhaktapur','Parbat','Gulmi','Bardiya','Sindhuli'];
+function districtOf(r){const t=(r.found_full||r.found_place||'');for(const d of DISTRICTS){if(t.indexOf(d)>=0)return d;}return '';}
+function ageIn(a){const mn=val('fAgeMin'),mx=val('fAgeMax');if(!mn&&!mx)return true;const n=parseInt(a,10);if(isNaN(n))return false;if(mn&&n<+mn)return false;if(mx&&n>+mx)return false;return true;}
+
+function buildFilters(){
+  const box=document.getElementById('filters');box.innerHTML='';
+  const add=(lbl,id,opts)=>{const d=document.createElement('div');d.innerHTML=`<label>${lbl}</label>`;const s=document.createElement('select');s.id=id;s.innerHTML='<option value="">All</option>'+opts.map(o=>`<option>${esc(o)}</option>`).join('');d.appendChild(s);box.appendChild(d);};
+  const node=(html)=>{const d=document.createElement('div');d.innerHTML=html;box.appendChild(d);};
+  const ageBox=()=>node('<label>Age range</label><div style="display:flex;gap:6px"><input type="number" id="fAgeMin" placeholder="min" min="0" style="width:50%"><input type="number" id="fAgeMax" placeholder="max" min="0" style="width:50%"></div>');
+  const uniq=(arr,k)=>[...new Set(arr.map(r=>r[k]).filter(Boolean))].sort();
+  if(TAB==='rescued'){
+    add('Nationality','fNat',['Nepali','Foreign']);
+    add('Gender','fGen',['Male','Female','Other']);
+    add('Country','fCountry',uniq(DATA.rescued,'country'));
+    add('Status','fStatus',uniq(DATA.rescued,'status'));
+    add('Rescued from','fRFrom',uniq(DATA.rescued,'rescued_from'));
+    ageBox();
+  }else{
+    node('<label>Flood victims</label><div class="check" style="padding:9px 0"><input type="checkbox" id="fFlood" checked><span>Rasuwa flood only</span></div>');
+    add('Gender','fGenD',['Male','Female','Other']);
+    add('Found district','fDist',[...new Set(DATA.deceased.map(districtOf).filter(Boolean))].sort());
+    add('Has description','fDesc',['With details','No details yet']);
+    node('<label>Found on/after</label><input type="date" id="fFrom" value="2026-08-26">');
+    node('<label>Found on/before</label><input type="date" id="fTo">');
+    ageBox();
+  }
+  box.querySelectorAll('input,select').forEach(el=>{el.oninput=render;el.onchange=render;});
+}
+
+function val(id){const e=document.getElementById(id);return e?(e.type==='checkbox'?e.checked:e.value):'';}
+
+function render(){
+  const q=val('q').trim();const maxD=+val('fz');const qv=queryVariants(q);
+  let list,cards;
+  if(TAB==='rescued'){
+    const nat=val('fNat'),gen=val('fGen'),cty=val('fCountry'),status=val('fStatus'),rfrom=val('fRFrom');
+    list=DATA.rescued.filter(r=>{
+      if(nat&&r.nationality!==nat)return false;
+      if(gen&&r.gender!==gen)return false;
+      if(cty&&r.country!==cty)return false;
+      if(status&&r.status!==status)return false;
+      if(rfrom&&r.rescued_from!==rfrom)return false;
+      if(!ageIn(r.age))return false;
+      if(q&&!matches(r.__hay||haystackR(r),qv,maxD))return false;
+      return true;
+    });
+    document.getElementById('warn').innerHTML='';
+    cards=list.slice(0,500).map(r=>{
+      const gc=r.gender==='Female'?'f':r.gender==='Male'?'m':'';
+      const st=/care/i.test(r.status)?'care':/safe/i.test(r.status)?'safe':'';
+      return `<div class="rec">
+        <div class="nm">${hi(r.name||'(name not listed)',qv,maxD)}${r.name_original&&r.name_original!==r.name?`<span class="orig">${hi(r.name_original,qv,maxD)}</span>`:''}</div>
+        <div class="badges">${r.gender?`<span class="b ${gc}">${esc(r.gender)}</span>`:''}${r.age?`<span class="b">Age ${esc(r.age)}</span>`:''}${r.nationality==='Foreign'?`<span class="b fo">Foreign${r.country?' · '+esc(r.country):''}</span>`:''}${r.status?`<span class="b ${st}">${esc(r.status)}</span>`:''}</div>
+        ${r.rescued_from?`<div class="fld"><b>Rescued from:</b> ${hi(r.rescued_from,qv,maxD)}</div>`:''}
+        ${r.stationed_at?`<div class="fld"><b>Now at:</b> ${hi(r.stationed_at,qv,maxD)}</div>`:''}
+        ${r.remarks?`<div class="fld">${hi(r.remarks,qv,maxD)}</div>`:''}
+      </div>`;
+    });
+  }else{
+    const flood=val('fFlood'),gen=val('fGenD'),dist=val('fDist'),desc=val('fDesc'),from=val('fFrom'),to=val('fTo');
+    list=DATA.deceased.filter(r=>{
+      if(flood&&!r.flood)return false;
+      if(gen&&r.gender!==gen)return false;
+      if(dist&&districtOf(r)!==dist)return false;
+      if(desc==='With details' && !(r.enriched&&(r.height||r.clothes||r.marks||r.build||r.special)))return false;
+      if(desc==='No details yet' && (r.enriched&&(r.height||r.clothes||r.marks||r.build||r.special)))return false;
+      if(from&&r.found_date_ad&&r.found_date_ad<from)return false;
+      if(to&&r.found_date_ad&&r.found_date_ad>to)return false;
+      if(!ageIn(r.age))return false;
+      if(q&&!matches(r.__hay||haystackD(r),qv,maxD))return false;
+      return true;
+    });
+    document.getElementById('warn').innerHTML='<div class="warn">These are <b>unidentified</b> people who have died. There are no names to search, so match on date, gender, place and <b>physical details</b> (clothing, marks, height), then <b>confirm with Nepal Police</b>. Photos are hidden by default. <label class="check" style="display:inline-flex;margin-left:6px"><input type="checkbox" id="showPh"> Show official photos</label></div>';
+    setTimeout(()=>{const s=document.getElementById('showPh');if(s){s.checked=document.body.classList.contains('showphoto');s.onchange=()=>{if(s.checked){const ok=confirm('WARNING: These are photographs of deceased, unidentified people and may be distressing. They are published by Nepal Police to help families identify loved ones. Do you want to show them?');if(!ok){s.checked=false;return;}}document.body.classList.toggle('showphoto',s.checked);};}},0);
+    list.sort((a,b)=>(b.found_date_ad||'').localeCompare(a.found_date_ad||''));
+    cards=list.slice(0,500).map(r=>{
+      const gc=r.gender==='Female'?'f':r.gender==='Male'?'m':'';
+      const photo=r.photo_url?`<div class="ph"><img loading="lazy" src="${esc(r.photo_url)}" onerror="this.parentNode.style.display='none'"></div>`:'';
+      const D=[['Height',r.height],['Weight',r.weight],['Build',r.build],['Complexion',r.complexion],['Eyes',r.eye_colour],['Hair',r.hair_colour],['Clothes',r.clothes],['Shoes',r.shoes],['Personal items',r.personal],['Marks / wounds',r.marks],['Ethnicity',r.ethnicity]].filter(x=>x[1]);
+      const det=D.length?`<div class="det"><div class="det-h">Identifying details</div>${D.map(x=>`<div class="fld"><b>${x[0]}:</b> ${hi(x[1],qv,maxD)}</div>`).join('')}</div>`:'';
+      const special=r.special?`<div class="note2"><b>Note:</b> ${hi(r.special,qv,maxD)}</div>`:'';
+      const nodet=(!D.length&&!r.special)?`<div class="fld" style="font-style:italic;color:var(--soft)">No physical description recorded yet. Open the official record.</div>`:'';
+      const foundAt=r.found_full||r.found_place||'-';
+      return `<div class="rec ${r.flood?'flood':''}">
+        ${photo}
+        <div class="badges">${r.flood?'<span class="b flood">Rasuwa flood</span>':''}<span class="b ${gc}">${esc(r.gender||'-')}</span>${r.age?`<span class="b">Age ${esc(r.age)}</span>`:''}${r.reg_no?`<span class="b" title="Registration number">Reg ${esc(r.reg_no)}</span>`:''}</div>
+        <div class="fld"><b>Found:</b> ${esc(r.found_date_ad||'-')}${r.found_date_bs?` <span style="color:var(--soft)">(BS ${esc(r.found_date_bs)})</span>`:''}${r.time?` · ${esc(r.time)}`:''}</div>
+        <div class="fld"><b>Found at:</b> ${hi(foundAt,qv,maxD)}</div>
+        <div class="fld"><b>Body kept at:</b> ${hi(r.current_location||'-',qv,maxD)}</div>
+        ${det}${special}${nodet}
+        ${r.detail_url?`<a class="open" href="${esc(r.detail_url)}" target="_blank" rel="noopener">View official police record ↗</a>`:''}
+      </div>`;
+    });
+  }
+  document.getElementById('count').innerHTML=`<b>${list.length}</b> possible record${list.length===1?'':'s'} shown`+(list.length>500?' (showing first 500, narrow your search)':'');
+  document.getElementById('grid').innerHTML=cards.length?cards.join(''):'<div class="empty">No possible records with these filters. Try raising spelling tolerance, a different spelling, or clearing filters.</div>';
+}
+
+function setTab(t){TAB=t;
+  document.getElementById('tabR').classList.toggle('active',t==='rescued');
+  document.getElementById('tabD').classList.toggle('active',t==='deceased');
+  document.getElementById('qlbl').textContent = t==='rescued'
+    ? 'Search by name (any spelling - English or Nepali)'
+    : 'Search by place or text (these records have no names)';
+  buildFilters();render();
+}
+
+document.getElementById('q').addEventListener('input',render);
+document.getElementById('fz').addEventListener('input',()=>{document.getElementById('fzl').textContent=['Exact','Low','Medium','High'][+val('fz')];render();});
+const ft=document.getElementById('filterToggle');if(ft)ft.onclick=()=>{const w=document.getElementById('filterWrap');const o=w.classList.toggle('open');ft.textContent=o?'Hide filters':'Show filters';};
+document.getElementById('tabR').onclick=()=>setTab('rescued');
+document.getElementById('tabD').onclick=()=>setTab('deceased');
+
+async function boot(){
+  try{
+    const [r,d,m]=await Promise.all([
+      fetch('data/rescued.json').then(x=>x.json()),
+      fetch('data/deceased.json').then(x=>x.json()),
+      fetch('data/meta.json').then(x=>x.json()).catch(()=>null)
+    ]);
+    const safeEng=s=>{try{return toEnglish(s||'')}catch(e){return s||''}};r.forEach(x=>{x.__hay=norm(haystackR(x)+' '+safeEng(x.name_original));});d.forEach(x=>{x.__hay=norm(haystackD(x)+' '+safeEng(x.found_place_original));});DATA.rescued=r;DATA.deceased=d;
+    document.getElementById('nR').textContent=r.length+' people';
+    document.getElementById('nD').textContent=d.length+' records';
+    if(m)document.getElementById('updated').textContent='Data last refreshed: '+new Date(m.last_updated).toLocaleString()+' · sources: Nepal Police & NDRRMA';
+  }catch(e){
+    document.getElementById('count').innerHTML='<div class="warn">Could not load the data files. When this page is hosted (GitHub Pages) with the <code>data/</code> folder beside it, results will appear automatically.</div>';
+  }
+  setTab('deceased');
+}
+boot();
+</script>
+</body>
+</html>
