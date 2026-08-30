@@ -171,12 +171,13 @@ function queryVariants(q){
   try{const t=norm(toEnglish(q));if(t)v.add(t);}catch(e){}
   return [...v].filter(Boolean);
 }
+function effD(qlen,maxD){return Math.min(maxD, qlen<=4?1:(qlen<=7?2:3));}
 function matches(hay,qv,maxD){
   const nh=norm(hay);
   for(const q of qv){
     if(!q)continue;
     if(nh.includes(q))return 'sub';
-    if(maxD>0&&q.length>=3){for(const w of nh.split(/[\s,.;/()\-]+/)){if(w&&Math.abs(w.length-q.length)<=maxD&&lev(w,q)<=maxD)return 'fz';}}
+    if(maxD>0&&q.length>=4){const d=effD(q.length,maxD);for(const w of nh.split(/[\s,.;/()\-]+/)){if(w&&Math.abs(w.length-q.length)<=d&&lev(w,q)<=d)return 'fz';}}
   }
   return false;
 }
@@ -184,7 +185,7 @@ function hi(txt,qv,maxD){
   const s=String(txt==null?'':txt);if(!qv.length)return esc(s);
   const ns=norm(s);
   for(const q of qv){const i=ns.indexOf(q);if(i>=0)return esc(s.slice(0,i))+'<mark class="s">'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));}
-  if(maxD>0)return s.split(/(\s+)/).map(w=>{const nw=norm(w);for(const q of qv)if(nw.length>=3&&lev(nw,q)<=maxD)return '<mark>'+esc(w)+'</mark>';return esc(w);}).join('');
+  if(maxD>0)return s.split(/(\s+)/).map(w=>{const nw=norm(w);for(const q of qv){const d=effD(q.length,maxD);if(q.length>=4&&Math.abs(nw.length-q.length)<=d&&lev(nw,q)<=d)return '<mark>'+esc(w)+'</mark>';}return esc(w);}).join('');
   return esc(s);
 }
 
@@ -263,7 +264,7 @@ function render(){
       return true;
     });
     document.getElementById('warn').innerHTML='<div class="warn">These are <b>unidentified</b> people who have died. There are no names to search, so match on date, gender, place and <b>physical details</b> (clothing, marks, height), then <b>confirm with Nepal Police</b>. Photos are hidden by default. <label class="check" style="display:inline-flex;margin-left:6px"><input type="checkbox" id="showPh"> Show official photos</label></div>';
-    setTimeout(()=>{const s=document.getElementById('showPh');if(s){s.checked=document.body.classList.contains('showphoto');s.onchange=()=>{if(s.checked){const ok=confirm('WARNING: These are photographs of deceased, unidentified people and may be distressing. They are published by Nepal Police to help families identify loved ones. Do you want to show them?');if(!ok){s.checked=false;return;}}document.body.classList.toggle('showphoto',s.checked);};}},0);
+    setTimeout(()=>{const s=document.getElementById('showPh');if(s){s.checked=document.body.classList.contains('showphoto');s.onchange=()=>{if(s.checked){const ok=confirm('WARNING: These are photographs of unidentified people who have died and may be distressing. They are published by Nepal Police to help families identify loved ones. Do you want to show them?');if(!ok){s.checked=false;return;}}document.body.classList.toggle('showphoto',s.checked);};}},0);
     list.sort((a,b)=>(b.found_date_ad||'').localeCompare(a.found_date_ad||''));
     cards=list.slice(0,500).map(r=>{
       const gc=r.gender==='Female'?'f':r.gender==='Male'?'m':'';
