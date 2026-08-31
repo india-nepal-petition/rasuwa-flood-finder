@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-08-31T09:05:15.684909+00:00",
-  "rescued_count": 2980,
-  "deceased_count": 2295,
-  "deceased_flood": 700,
-  "deceased_enriched": 700,
-  "rescued_foreign": 224,
+  "last_updated": "2026-08-31T12:32:01.794249+00:00",
+  "rescued_count": 2859,
+  "deceased_count": 2500,
+  "deceased_flood": 768,
+  "deceased_enriched": 754,
+  "rescued_foreign": 209,
   "sources": [
     "Nepal Police UDB",
     "NDRRMA Rescue"
