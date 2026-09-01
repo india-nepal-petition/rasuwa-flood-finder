@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-01T00:08:46.582066+00:00",
+  "last_updated": "2026-09-01T03:10:42.407262+00:00",
   "rescued_count": 3141,
-  "deceased_count": 2576,
-  "deceased_flood": 840,
-  "deceased_enriched": 840,
+  "deceased_count": 2580,
+  "deceased_flood": 849,
+  "deceased_enriched": 846,
   "rescued_foreign": 209,
   "sources": [
     "Nepal Police UDB",
